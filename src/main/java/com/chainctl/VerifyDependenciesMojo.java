@@ -10,7 +10,10 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 import org.apache.maven.shared.dependency.graph.DependencyNode;
@@ -61,6 +64,9 @@ public class VerifyDependenciesMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
+    private MavenSession session;
+
     @Component
     private DependencyGraphBuilder dependencyGraphBuilder;
 
@@ -93,7 +99,9 @@ public class VerifyDependenciesMojo extends AbstractMojo {
         // Collect artifacts from dependency tree
         Set<Artifact> artifacts;
         try {
-            DependencyNode rootNode = dependencyGraphBuilder.buildDependencyGraph(project, null);
+            ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest(session.getProjectBuildingRequest());
+            buildingRequest.setProject(project);
+            DependencyNode rootNode = dependencyGraphBuilder.buildDependencyGraph(buildingRequest, null);
             artifacts = collectArtifacts(rootNode, scopesToSkip);
         } catch (DependencyGraphBuilderException e) {
             throw new MojoExecutionException("Failed to build dependency graph: " + e.getMessage(), e);
