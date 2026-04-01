@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.chainguard</groupId>
+    <groupId>com.chainctl</groupId>
     <artifactId>chainctl-maven-plugin</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
@@ -13,8 +13,8 @@
     <description>Maven plugin that verifies dependencies against Chainguard Libraries using chainctl before fat JAR assembly.</description>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.version>3.9.6</maven.version>
         <maven-plugin-tools.version>3.11.0</maven-plugin-tools.version>
@@ -43,6 +43,13 @@
             <artifactId>maven-core</artifactId>
             <version>${maven.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- Dependency Tree -->
+        <dependency>
+            <groupId>org.apache.maven.shared</groupId>
+            <artifactId>maven-dependency-tree</artifactId>
+            <version>3.0.1</version>
         </dependency>
 
         <!-- Testing -->
